@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "inputs": ["countries"],
+    "derived": [
+      "countryCount",
+      "continentsVisited",
+      "centroid",
+      "maxDistanceKm"
+    ],
+    "philosophy": "symbolic_identity_over_geographic_accuracy"
+  },
+
+  "constants": {
+    "CONNECTOR_RADIUS_KM": 2000,
+    "SOFT_CONNECTOR_MAX_KM": 2400,
+    "STRATEGIST_MIN_DISTANCE_KM": 4000,
+    "NOMAD_MIN_DISTANCE_KM": 6000,
+    "GLOBAL_BUILDER_MIN_CONTINENTS": 3
+  },
+
+  "hierarchy": [
+    "You're a Nomad",
+    "You're a Global Builder",
+    "You're a Strategist",
+    "You're a Connector",
+    "You're a Returner",
+    "You're an Explorer",
+    "You're an Observer"
+  ],
+
+  "archetypes": {
+    "You're a Nomad": {
+      "intent": "Always moving — the world feels like home",
+      "constraints": {
+        "countryCount": { "min": 10 },
+        "maxDistanceKm": { "min": 6000 }
+      }
+    },
+
+    "You're a Global Builder": {
+      "intent": "Building things that naturally cross borders",
+      "constraints": {
+        "countryCount": { "min": 6 },
+        "continentsVisited": { "min": 3 },
+        "maxDistanceKm": { "min": 3000, "max": 6000 }
+      }
+    },
+
+    "You're a Strategist": {
+      "intent": "Selective, intentional, and thinking long-term",
+      "constraints": {
+        "countryCount": { "max": 6 },
+        "maxDistanceKm": { "min": 4000 }
+      }
+    },
+
+    "You're a Connector": {
+      "intent": "Focused on nearby places and real connections",
+      "constraints": {
+        "maxDistanceKm": { "max": 2000 }
+      },
+      "softConstraints": {
+        "maxDistanceKm": { "max": 2400 },
+        "countryCount": { "max": 7 }
+      }
+    },
+
+    "You're a Returner": {
+      "intent": "Revisiting places to go deeper, not wider",
+      "constraints": {
+        "countryCount": { "min": 4 },
+        "continentsVisited": { "max": 2 },
+        "maxDistanceKm": { "max": 3000 }
+      }
+    },
+
+    "You're an Explorer": {
+      "intent": "Stretching your comfort zone, step by step",
+      "constraints": {
+        "countryCount": { "min": 3, "max": 5 },
+        "maxDistanceKm": { "min": 2000, "max": 5000 }
+      }
+    },
+
+    "You're an Observer": {
+      "intent": "Watching, learning, and getting ready",
+      "constraints": {
+        "countryCount": { "max": 2 }
+      }
+    }
+  },
+
+  "resolutionRules": {
+    "selection": "first_match_by_hierarchy",
+    "tieBreakers": [
+      "higher_maxDistanceKm",
+      "higher_continentsVisited"
+    ],
+    "guarantees": [
+      "exactly_one_archetype_assigned",
+      "no_negative_or_shaming_outputs",
+      "logic_never_exposed_to_user"
+    ]
+  }
+}
